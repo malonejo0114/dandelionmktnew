@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { DandelionMark } from "@/components/dandelion-mark";
-import { navItems } from "@/data/site";
+import type { SiteContent } from "@/data/content";
 
-export function SiteHeader() {
+export function SiteHeader({ common }: { common: SiteContent["common"] }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -45,16 +45,16 @@ export function SiteHeader() {
         <Link href="/" className="flex items-center gap-3" aria-label="Dandelion Effect home">
           <DandelionMark className="size-7" />
           <span className="font-display text-base uppercase tracking-[0.28em] text-[#F4EFE5]">
-            Dandelion Effect
+            {common.brandName}
           </span>
         </Link>
 
         <span className="hidden font-kr text-xs tracking-[0.1em] text-[#8B8B86] lg:block">
-          주식회사 민들레효과
+          {common.corpName}
         </span>
 
         <nav className="hidden items-center gap-8 lg:flex">
-          {navItems.map((item) => (
+          {common.nav.map((item) => (
             <a
               key={item.href}
               href={item.href}
@@ -67,7 +67,7 @@ export function SiteHeader() {
             href="#cta"
             className="border border-[#D6B77A] px-5 py-2 font-display text-xs uppercase tracking-[0.2em] text-[#D6B77A] transition-colors hover:bg-[#D6B77A] hover:text-[#111214]"
           >
-            Contact
+            {common.contactLabel}
           </a>
         </nav>
 
@@ -87,14 +87,14 @@ export function SiteHeader() {
         <div role="dialog" aria-modal="true" className="fixed inset-0 z-[60] flex flex-col bg-[#111214] px-6 py-6 lg:hidden">
           <div className="flex items-center justify-between">
             <span className="font-display text-base uppercase tracking-[0.28em] text-[#F4EFE5]">
-              Dandelion Effect
+              {common.brandName}
             </span>
             <button type="button" onClick={() => setOpen(false)} aria-label="메뉴 닫기" className="text-2xl text-[#F4EFE5]">
               ×
             </button>
           </div>
           <nav className="mt-16 flex flex-col gap-8">
-            {navItems.map((item) => (
+            {common.nav.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
@@ -109,7 +109,7 @@ export function SiteHeader() {
               onClick={() => setOpen(false)}
               className="mt-4 border border-[#D6B77A] px-6 py-4 text-center font-display text-sm uppercase tracking-[0.2em] text-[#D6B77A]"
             >
-              무료 성장 진단
+              {common.mobileCtaLabel}
             </a>
           </nav>
         </div>

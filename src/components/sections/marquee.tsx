@@ -1,7 +1,7 @@
-import { marqueeWords } from "@/data/site";
+import type { SiteContent } from "@/data/content";
 
-export function Marquee() {
-  const words = [...marqueeWords, ...marqueeWords];
+export function Marquee({ words: source }: { words: SiteContent["common"]["marqueeWords"] }) {
+  const words = [...source, ...source];
   return (
     <div className="overflow-hidden border-y border-[#343437] bg-[#111214] py-4">
       <div data-marquee-track className="flex w-max items-center gap-10 whitespace-nowrap">

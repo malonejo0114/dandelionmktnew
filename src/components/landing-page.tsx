@@ -13,8 +13,9 @@ import { GrowthCTA } from "@/components/sections/growth-cta";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { playHeroIntro, registerScrollReveal } from "@/lib/motion";
 import type { Case } from "@/lib/portfolio";
+import type { SiteContent } from "@/data/content";
 
-export function LandingPage({ cases }: { cases: Case[] }) {
+export function LandingPage({ cases, content }: { cases: Case[]; content: SiteContent }) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,17 +29,17 @@ export function LandingPage({ cases }: { cases: Case[] }) {
 
   return (
     <div ref={rootRef} className="min-h-screen overflow-hidden bg-[#18191B] text-[#F4EFE5]">
-      <SiteHeader />
+      <SiteHeader common={content.common} />
       <main>
-        <Hero />
-        <Marquee />
-        <About />
-        <Framework />
+        <Hero hero={content.hero} />
+        <Marquee words={content.common.marqueeWords} />
+        <About about={content.about} />
+        <Framework framework={content.framework} />
         <Portfolio cases={cases} />
         <Journal />
-        <GrowthCTA />
+        <GrowthCTA cta={content.cta} />
       </main>
-      <SiteFooter />
+      <SiteFooter common={content.common} />
     </div>
   );
 }
