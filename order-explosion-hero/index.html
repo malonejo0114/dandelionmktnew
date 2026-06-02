@@ -1,0 +1,364 @@
+<!doctype html>
+<html
+  lang="ko"
+  data-composition-variables='[
+    {"id":"headline","type":"string","label":"헤드라인","default":"주문폭발"},
+    {"id":"subhead","type":"string","label":"서브카피","default":"네이버 · 쿠팡에서 지금 터지는 매출"},
+    {"id":"cta","type":"string","label":"CTA","default":"무료 매출 진단 받기"},
+    {"id":"brandName","type":"string","label":"브랜드명","default":"GROWTH LAB"},
+    {"id":"orderTarget","type":"number","label":"주문 카운터 목표","default":87940}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Pretendard"; font-weight: 400; src: url("fonts/Pretendard-Regular.woff2") format("woff2"); }
+      @font-face { font-family: "Pretendard"; font-weight: 500; src: url("fonts/Pretendard-Medium.woff2") format("woff2"); }
+      @font-face { font-family: "Pretendard"; font-weight: 600; src: url("fonts/Pretendard-SemiBold.woff2") format("woff2"); }
+      @font-face { font-family: "Pretendard"; font-weight: 700; src: url("fonts/Pretendard-Bold.woff2") format("woff2"); }
+      @font-face { font-family: "Pretendard"; font-weight: 800; src: url("fonts/Pretendard-ExtraBold.woff2") format("woff2"); }
+      @font-face { font-family: "Pretendard"; font-weight: 900; src: url("fonts/Pretendard-Black.woff2") format("woff2"); }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1920px; height: 1080px; overflow: hidden;
+        background: #0A0E14; font-family: "Pretendard", sans-serif;
+      }
+
+      #root { position: relative; width: 1920px; height: 1080px; background: #0A0E14; }
+
+      /* ---------- Background layer ---------- */
+      .bg-base { position: absolute; inset: 0; background: #0A0E14; z-index: 1; }
+      .glow { position: absolute; border-radius: 50%; filter: blur(10px); z-index: 1; will-change: transform, opacity; }
+      .glow-green {
+        width: 1000px; height: 1000px; left: -260px; top: 120px;
+        background: radial-gradient(circle, rgba(3,199,90,0.55) 0%, rgba(3,199,90,0.12) 38%, rgba(3,199,90,0) 66%);
+      }
+      .glow-red {
+        width: 1000px; height: 1000px; right: -260px; bottom: 40px;
+        background: radial-gradient(circle, rgba(255,59,48,0.5) 0%, rgba(255,59,48,0.12) 38%, rgba(255,59,48,0) 66%);
+      }
+      .grid {
+        position: absolute; inset: 0; z-index: 2; opacity: 0.5;
+        background-image:
+          linear-gradient(rgba(138,148,166,0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(138,148,166,0.06) 1px, transparent 1px);
+        background-size: 96px 96px;
+        mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 78%);
+        -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 78%);
+      }
+      .vignette { position: absolute; inset: 0; z-index: 3; pointer-events: none;
+        background: radial-gradient(circle at 50% 46%, transparent 52%, rgba(0,0,0,0.55) 100%); }
+
+      /* ---------- Brandmark (persistent) ---------- */
+      .brandmark { position: absolute; top: 64px; left: 96px; z-index: 12; display: flex; align-items: center; gap: 16px; }
+      .brandmark .dot { width: 16px; height: 16px; border-radius: 5px; background: #FFC400; box-shadow: 0 0 18px rgba(255,196,0,0.8); }
+      .brandmark .name { font-weight: 800; font-size: 28px; color: #FFFFFF; letter-spacing: 0.02em; }
+      .brandmark .tag { font-weight: 600; font-size: 18px; color: #8A94A6; letter-spacing: 0.18em; }
+
+      /* ---------- Stage (everything that gets detonated) ---------- */
+      .stage { position: absolute; inset: 0; z-index: 5; }
+
+      /* Counter */
+      .counter { position: absolute; left: 120px; top: 0; height: 100%; z-index: 6;
+        display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+      .counter .label {
+        font-weight: 600; font-size: 24px; color: #8A94A6;
+        letter-spacing: 0.16em; margin-bottom: 8px;
+      }
+      .counter .label .live {
+        display: inline-block; width: 11px; height: 11px; border-radius: 50%;
+        background: #FF3B30; margin-right: 12px; vertical-align: middle;
+        box-shadow: 0 0 14px rgba(255,59,48,0.9);
+      }
+      .counter .num {
+        font-weight: 800; font-size: 200px; line-height: 0.92; color: #FFFFFF;
+        font-variant-numeric: tabular-nums; letter-spacing: -0.03em;
+        text-shadow: 0 0 50px rgba(3,199,90,0.35);
+      }
+      .counter .unit { font-weight: 700; font-size: 56px; color: #03C75A; margin-left: 14px; }
+
+      /* Toast stack */
+      .toasts { position: absolute; right: 110px; top: 150px; width: 560px; z-index: 6;
+        display: flex; flex-direction: column; gap: 18px; }
+      .toast {
+        display: flex; align-items: center; gap: 20px;
+        background: rgba(20,26,36,0.92); border: 2px solid rgba(138,148,166,0.18);
+        border-radius: 20px; padding: 22px 26px; backdrop-filter: blur(4px);
+        box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+      }
+      .toast .chip {
+        width: 56px; height: 56px; border-radius: 16px; flex: 0 0 auto;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .toast .chip.naver { background: #03C75A; box-shadow: 0 0 22px rgba(3,199,90,0.6); }
+      .toast .chip.coupang { background: #E03127; box-shadow: 0 0 22px rgba(224,49,39,0.6); }
+      .toast .chip svg { width: 30px; height: 30px; display: block; }
+      .toast .body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+      .toast .src { font-weight: 700; font-size: 24px; color: #FFFFFF; }
+      .toast .msg { font-weight: 500; font-size: 19px; color: #8A94A6; }
+      .toast .amt { margin-left: auto; font-weight: 800; font-size: 26px; color: #FFC400;
+        font-variant-numeric: tabular-nums; }
+
+      /* Energy stream + rocket */
+      .stream { position: absolute; left: 0; top: 50%; height: 10px; width: 760px; z-index: 6;
+        transform: translateY(-50%); transform-origin: left center;
+        background: linear-gradient(90deg, rgba(3,199,90,0) 0%, #03C75A 70%, #b9ffd6 100%);
+        border-radius: 6px; filter: blur(0.4px); box-shadow: 0 0 26px rgba(3,199,90,0.8); }
+      .rocket { position: absolute; right: 0; top: 50%; transform: translateY(-50%); z-index: 7;
+        display: flex; align-items: center; }
+      .rocket .trail { width: 420px; height: 8px; border-radius: 6px;
+        background: linear-gradient(90deg, #FF3B30 0%, rgba(255,122,0,0.6) 60%, rgba(255,122,0,0) 100%);
+        box-shadow: 0 0 24px rgba(255,59,48,0.8); }
+      .rocket .ship { width: 78px; height: 78px; margin-left: -6px; filter: drop-shadow(0 0 18px rgba(255,59,48,0.8)); }
+
+      /* Detonation */
+      .burst { position: absolute; left: 50%; top: 50%; width: 1500px; height: 1500px; z-index: 8;
+        transform: translate(-50%, -50%) scale(0); opacity: 0; pointer-events: none;
+        background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,196,0,0.9) 22%, rgba(255,122,0,0.55) 46%, rgba(255,122,0,0) 70%); }
+      .ring { position: absolute; left: 50%; top: 50%; width: 360px; height: 360px; z-index: 8;
+        transform: translate(-50%, -50%) scale(0); opacity: 0; border: 6px solid #FFC400; border-radius: 50%;
+        box-shadow: 0 0 40px rgba(255,196,0,0.7); }
+      .particles { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 9; }
+      .particles .p { position: absolute; left: 0; top: 0; font-weight: 800; opacity: 0;
+        font-variant-numeric: tabular-nums; will-change: transform, opacity; }
+      .flash { position: absolute; inset: 0; z-index: 20; background: #FFFFFF; opacity: 0; pointer-events: none; }
+
+      /* ---------- Hero (act 3) ---------- */
+      .hero { position: absolute; inset: 0; z-index: 11; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 30px; }
+      .hero .kicker { font-weight: 600; font-size: 26px; letter-spacing: 0.34em; color: #FFC400; opacity: 0; }
+      .hero .headline { font-weight: 900; font-size: 230px; line-height: 0.9; color: #FFFFFF;
+        letter-spacing: -0.045em; display: flex; }
+      .hero .headline .hchar { display: inline-block; opacity: 0; }
+      .hero .headline .hchar.g { color: #03C75A; text-shadow: 0 0 44px rgba(3,199,90,0.6); }
+      .hero .headline .hchar.r { color: #FF3B30; text-shadow: 0 0 44px rgba(255,59,48,0.6); }
+      .hero .subhead { font-weight: 500; font-size: 46px; color: #FFFFFF; opacity: 0; }
+      .hero .subhead b { font-weight: 800; }
+      .hero .cta { margin-top: 14px; display: flex; align-items: center; gap: 16px;
+        background: #FFC400; color: #0A0E14; font-weight: 800; font-size: 32px;
+        padding: 26px 48px; border-radius: 999px; opacity: 0;
+        box-shadow: 0 0 50px rgba(255,196,0,0.55); }
+      .hero .cta .arrow { font-size: 30px; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="8.5"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- Background -->
+      <div class="bg-base"></div>
+      <div class="glow glow-green"></div>
+      <div class="glow glow-red"></div>
+      <div class="grid"></div>
+      <div class="vignette"></div>
+
+      <!-- Brandmark -->
+      <div class="brandmark">
+        <span class="dot"></span>
+        <span class="name" id="brandName">GROWTH LAB</span>
+        <span class="tag">PERFORMANCE MARKETING</span>
+      </div>
+
+      <!-- Stage: detonated content (flies off-frame by design at detonation) -->
+      <div class="stage" data-layout-allow-overflow>
+        <!-- Counter -->
+        <div class="counter">
+          <div class="label"><span class="live"></span>오늘 들어온 주문</div>
+          <div><span class="num" id="count">0</span><span class="unit">건</span></div>
+        </div>
+
+        <!-- Toast stack -->
+        <div class="toasts" id="toasts"></div>
+
+        <!-- Energy -->
+        <div class="stream"></div>
+        <div class="rocket">
+          <div class="trail"></div>
+          <svg class="ship" viewBox="0 0 64 64" fill="none">
+            <path d="M40 6c10 6 16 18 14 34l-12 8-14-2-6-10C24 22 30 12 40 6z" fill="#FF3B30"/>
+            <circle cx="38" cy="24" r="6" fill="#0A0E14"/>
+            <path d="M22 40l-12 6 8 4 6 6 4-12-6-4z" fill="#FF7A00"/>
+          </svg>
+        </div>
+
+        <!-- Detonation -->
+        <div class="ring"></div>
+        <div class="burst"></div>
+        <div class="particles" id="particles" data-layout-allow-overflow></div>
+      </div>
+
+      <!-- Hero -->
+      <div class="hero">
+        <div class="kicker">NAVER · COUPANG</div>
+        <div class="headline" id="headline"></div>
+        <div class="subhead" id="subhead"></div>
+        <div class="cta"><span id="ctaText">무료 매출 진단 받기</span><span class="arrow">→</span></div>
+      </div>
+
+      <div class="flash"></div>
+    </div>
+
+    <script>
+      (function () {
+        var V = (window.__hyperframes && window.__hyperframes.getVariables)
+          ? window.__hyperframes.getVariables()
+          : { headline: "주문폭발", subhead: "네이버 · 쿠팡에서 지금 터지는 매출", cta: "무료 매출 진단 받기", brandName: "GROWTH LAB", orderTarget: 87940 };
+
+        // ----- seeded PRNG (no Math.random) -----
+        function mulberry32(a) {
+          return function () {
+            a |= 0; a = (a + 0x6D2B79F5) | 0;
+            var t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+        var rng = mulberry32(20260601);
+
+        function fmt(n) {
+          n = Math.round(n); var s = String(n), out = "", c = 0;
+          for (var i = s.length - 1; i >= 0; i--) { out = s[i] + out; c++; if (c % 3 === 0 && i > 0) out = "," + out; }
+          return out;
+        }
+
+        // ----- inject variable-driven text -----
+        document.getElementById("brandName").textContent = V.brandName;
+        document.getElementById("subhead").innerHTML = String(V.subhead).replace(/네이버/g, "<b>네이버</b>").replace(/쿠팡/g, "<b>쿠팡</b>");
+        document.getElementById("ctaText").textContent = V.cta;
+
+        // headline split into chars, colored by source brand vibe
+        var hl = String(V.headline);
+        var hEl = document.getElementById("headline");
+        for (var i = 0; i < hl.length; i++) {
+          var sp = document.createElement("span");
+          sp.className = "hchar" + (i < hl.length / 2 ? " g" : " r");
+          sp.textContent = hl[i];
+          hEl.appendChild(sp);
+        }
+
+        // ----- toast data -----
+        var NAVER = '<svg viewBox="0 0 30 30"><path d="M6 6h6.2l5.6 8.1V6H24v18h-6.2l-5.6-8.1V24H6z" fill="#fff"/></svg>';
+        var COUPANG = '<svg viewBox="0 0 30 30"><path d="M20 4c5 3 8 9 7 17l-6 4-7-1-3-5C12 11 15 7 20 4z" fill="#fff"/><circle cx="19" cy="13" r="3" fill="#E03127"/></svg>';
+        var toasts = [
+          { k: "naver", src: "네이버 스마트스토어", msg: "결제 완료 · 방금", amt: "+1", icon: NAVER },
+          { k: "coupang", src: "쿠팡 로켓배송", msg: "신규 주문 · 방금", amt: "+1", icon: COUPANG },
+          { k: "naver", src: "네이버 쇼핑", msg: "장바구니 → 결제 전환", amt: "+12", icon: NAVER },
+          { k: "coupang", src: "쿠팡 로켓와우", msg: "주문 폭주 감지", amt: "+38", icon: COUPANG },
+          { k: "naver", src: "네이버 검색 유입", msg: "실시간 트래픽 급증", amt: "+204", icon: NAVER }
+        ];
+        var tWrap = document.getElementById("toasts");
+        toasts.forEach(function (t) {
+          var d = document.createElement("div");
+          d.className = "toast";
+          d.innerHTML = '<div class="chip ' + t.k + '">' + t.icon + '</div>'
+            + '<div class="body"><div class="src">' + t.src + '</div><div class="msg">' + t.msg + '</div></div>'
+            + '<div class="amt">' + t.amt + '</div>';
+          tWrap.appendChild(d);
+        });
+
+        // ----- particles -----
+        var pWrap = document.getElementById("particles");
+        var PCOUNT = 46;
+        var parts = [];
+        for (var p = 0; p < PCOUNT; p++) {
+          var el = document.createElement("span");
+          el.className = "p";
+          var roll = rng();
+          if (roll < 0.5) { el.textContent = "₩"; el.style.color = "#FFC400"; el.style.fontSize = (26 + rng() * 30) + "px"; }
+          else if (roll < 0.75) { el.textContent = "•"; el.style.color = "#03C75A"; el.style.fontSize = (18 + rng() * 22) + "px"; }
+          else { el.textContent = "•"; el.style.color = "#FF3B30"; el.style.fontSize = (18 + rng() * 22) + "px"; }
+          pWrap.appendChild(el);
+          var ang = rng() * Math.PI * 2;
+          var dist = 320 + rng() * 470;
+          parts.push({ el: el, dx: Math.cos(ang) * dist, dy: Math.sin(ang) * dist, rot: (rng() * 2 - 1) * 220, dur: 0.9 + rng() * 0.7 });
+        }
+
+        // ============ TIMELINE ============
+        window.__timelines = window.__timelines || {};
+        var tl = gsap.timeline({ paused: true });
+        var DUR = 8.5;
+        var DET = 4.5; // detonation
+
+        // Background fade-in
+        tl.fromTo([".glow-green", ".glow-red"], { opacity: 0 }, { opacity: 1, duration: 1.0, ease: "sine.out" }, 0.1);
+        tl.fromTo(".grid", { opacity: 0 }, { opacity: 0.5, duration: 1.2, ease: "sine.out" }, 0.2);
+
+        // Ambient breathing on glows (seekable, finite)
+        var cyc = 2.6, reps = Math.ceil(DUR / cyc) - 1;
+        tl.to(".glow-green", { scale: 1.12, duration: cyc, ease: "sine.inOut", yoyo: true, repeat: reps, transformOrigin: "center" }, 0.2);
+        tl.to(".glow-red", { scale: 1.14, duration: cyc * 1.07, ease: "sine.inOut", yoyo: true, repeat: reps, transformOrigin: "center" }, 0.5);
+
+        // Brandmark
+        tl.fromTo(".brandmark", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.25);
+
+        // Counter entrance + roll-up
+        tl.fromTo(".counter .label", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 0.5);
+        tl.fromTo(".counter .num", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(1.7)" }, 0.7);
+        tl.fromTo(".counter .unit", { x: -16, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, 0.95);
+        var countProxy = { v: 0 };
+        var countEl = document.getElementById("count");
+        tl.to(countProxy, {
+          v: V.orderTarget, duration: 3.4, ease: "power2.in",
+          onUpdate: function () { countEl.textContent = fmt(countProxy.v); }
+        }, 1.0);
+
+        // Toasts cascade (accelerating: gaps shrink)
+        var tEls = tWrap.querySelectorAll(".toast");
+        var tStart = [0.8, 1.5, 2.2, 2.8, 3.3];
+        for (var ti = 0; ti < tEls.length; ti++) {
+          tl.fromTo(tEls[ti], { x: 70, opacity: 0, scale: 0.92 },
+            { x: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.5)" }, tStart[ti]);
+        }
+
+        // Energy converge
+        tl.fromTo(".stream", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.7, ease: "power3.out" }, 3.5);
+        tl.fromTo(".rocket", { x: 240, yPercent: -50, opacity: 0 }, { x: -560, yPercent: -50, opacity: 1, duration: 0.9, ease: "power3.in" }, 3.7);
+
+        // ---- DETONATION ----
+        tl.set(".rocket", { opacity: 0 }, DET);
+        tl.fromTo(".flash", { opacity: 0 }, { opacity: 0.92, duration: 0.08, ease: "power2.out" }, DET);
+        tl.to(".flash", { opacity: 0, duration: 0.5, ease: "power2.in" }, DET + 0.08);
+        tl.fromTo(".burst", { scale: 0, opacity: 1 }, { scale: 1.25, opacity: 0, duration: 0.9, ease: "expo.out" }, DET);
+        tl.fromTo(".ring", { scale: 0, opacity: 0.9 }, { scale: 4.2, opacity: 0, duration: 0.9, ease: "expo.out" }, DET);
+
+        // particles explode outward
+        for (var pi = 0; pi < parts.length; pi++) {
+          var pp = parts[pi];
+          tl.fromTo(pp.el,
+            { x: 0, y: 0, opacity: 0, scale: 0.3, rotation: 0 },
+            { x: pp.dx, y: pp.dy, opacity: 1, scale: 1, rotation: pp.rot, duration: pp.dur * 0.5, ease: "expo.out" }, DET);
+          tl.to(pp.el, { opacity: 0, duration: pp.dur * 0.6, ease: "power1.in" }, DET + pp.dur * 0.45);
+        }
+
+        // stage shake + fling act-1 content outward (consumed by blast)
+        tl.to(".stage", { keyframes: { x: [0, -16, 13, -8, 5, 0], y: [0, 9, -7, 4, -2, 0] }, duration: 0.55, ease: "power2.out" }, DET);
+        tl.to(".counter", { x: -260, scale: 1.18, opacity: 0, duration: 0.6, ease: "power2.in" }, DET + 0.02);
+        tl.to(".toasts", { x: 320, scale: 1.1, opacity: 0, duration: 0.55, ease: "power2.in" }, DET + 0.02);
+        tl.to(".stream", { scaleX: 1.6, opacity: 0, duration: 0.4, ease: "power2.in" }, DET);
+
+        // ---- HERO (act 3) ----
+        tl.fromTo(".hero .kicker", { y: 26, opacity: 0, letterSpacing: "0.5em" },
+          { y: 0, opacity: 1, letterSpacing: "0.34em", duration: 0.6, ease: "power3.out" }, DET + 0.35);
+        tl.fromTo(".hero .headline .hchar",
+          { y: 120, opacity: 0, scale: 1.6, rotation: -6 },
+          { y: 0, opacity: 1, scale: 1, rotation: 0, duration: 0.62, ease: "back.out(2)", stagger: 0.08 }, DET + 0.42);
+        tl.fromTo(".hero .subhead", { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power2.out" }, DET + 0.95);
+        tl.fromTo(".hero .cta", { y: 30, scale: 0.8, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.2)" }, DET + 1.2);
+
+        // breathe: headline glow pulse + CTA pulse (finite)
+        tl.to(".hero .headline", { filter: "brightness(1.12)", duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: 2 }, DET + 1.6);
+        tl.to(".hero .cta", { scale: 1.04, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 2 }, DET + 1.7);
+
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>

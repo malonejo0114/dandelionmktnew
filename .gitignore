@@ -1,0 +1,57 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+/.playwright-mcp
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# 작업 중 생성된 디버그 스크린샷(루트만)
+/*.png
+
+# 브레인스토밍 visual companion 산출물
+/.superpowers/
+
+# macOS/iCloud 중복 복사본 (예: "page 2.tsx")
+* 2.*
+* 3.*
+
+# 스킬 스캐폴딩/캐시 (앱 코드 아님)
+/.agents/
+/skills-lock.json
