@@ -113,30 +113,21 @@ export async function updateCase(id: string, formData: FormData) {
   redirect("/admin/portfolio");
 }
 
-export type UploadResult = { url: string } | { error: string };
+export type SignedUpload = { path: string; token: string } | { error: string };
 
-export async function uploadMedia(formData: FormData): Promise<UploadResult> {
+/**
+ * 브라우저 직접 업로드용 서명 URL 발급 (파일 본문이 서버를 거치지 않음 → Vercel 4.5MB 한도 회피).
+ * 클라이언트는 반환된 path+token으로 storage.uploadToSignedUrl()을 호출한다.
+ */
+export async function createUploadUrl(slug: string, kind: string, ext: string): Promise<SignedUpload> {
   await assertAdmin();
   const supabase = getSupabaseAdmin();
   if (!supabase) return { error: "supabase not configured" };
-  const file = formData.get("file") as File | null;
-  const slug = String(formData.get("slug") ?? "case").trim() || "case";
-  const kind = String(formData.get("kind") ?? "media"); // "video" | "poster"
-  if (!file || file.size === 0) return { error: "파일이 없습니다." };
-  const maxBytes = kind === "video" ? 50 * 1024 * 1024 : 5 * 1024 * 1024;
-  if (file.size > maxBytes) return { error: "파일이 너무 큽니다." };
-  const allowedTypes = kind === "video"
-    ? ["video/mp4", "video/webm", "video/quicktime"]
-    : ["image/jpeg", "image/png", "image/webp"];
-  if (!allowedTypes.includes(file.type)) {
-    return { error: "지원하지 않는 파일 형식입니다." };
-  }
-  const ext = (file.name.split(".").pop() ?? "bin").toLowerCase();
-  const path = `cases/${slug}/${kind}-${Date.now()}.${ext}`;
-  const { error } = await supabase.storage
-    .from("portfolio-media")
-    .upload(path, file, { contentType: file.type, upsert: true });
-  if (error) return { error: "업로드 실패." };
-  const { data } = supabase.storage.from("portfolio-media").getPublicUrl(path);
-  return { url: data.publicUrl };
+  const safeSlug = (slug || "case").replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase() || "case";
+  const safeKind = kind === "video" ? "video" : "poster";
+  const safeExt = (ext || "bin").toLowerCase().replace(/[^a-z0-9]/g, "") || "bin";
+  const path = `cases/${safeSlug}/${safeKind}-${Date.now()}.${safeExt}`;
+  const { data, error } = await supabase.storage.from("portfolio-media").createSignedUploadUrl(path);
+  if (error || !data) return { error: "업로드 URL 생성 실패." };
+  return { path: data.path, token: data.token };
 }

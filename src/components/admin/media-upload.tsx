@@ -1,7 +1,18 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { uploadMedia, type UploadResult } from "@/app/admin/actions";
+import { createUploadUrl } from "@/app/admin/actions";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+
+const MAX = {
+  video: 300 * 1024 * 1024, // 300MB
+  poster: 10 * 1024 * 1024, // 10MB
+} as const;
+
+const ALLOWED = {
+  video: ["video/mp4", "video/webm", "video/quicktime"],
+  poster: ["image/jpeg", "image/png", "image/webp"],
+} as const;
 
 export function MediaUpload({
   kind, slug, value, onChange, accept,
@@ -17,17 +28,38 @@ export function MediaUpload({
   const [error, setError] = useState("");
 
   async function handleFile(file: File) {
-    setBusy(true); setError("");
+    setBusy(true);
+    setError("");
     try {
-      const fd = new FormData();
-      fd.set("file", file);
-      fd.set("slug", slug || "case");
-      fd.set("kind", kind);
-      const res: UploadResult = await uploadMedia(fd);
-      if ("url" in res) onChange(res.url);
-      else setError(res.error);
+      if (file.size > MAX[kind]) {
+        setError(kind === "video" ? "영상이 너무 큽니다 (최대 300MB)." : "이미지가 너무 큽니다 (최대 10MB).");
+        return;
+      }
+      if (file.type && !(ALLOWED[kind] as readonly string[]).includes(file.type)) {
+        setError("지원하지 않는 형식입니다.");
+        return;
+      }
+      const ext = file.name.split(".").pop() ?? "bin";
+      // 1) 서버에서 서명 업로드 URL 발급 (파일 본문 없음 → 용량 제한 무관)
+      const res = await createUploadUrl(slug || "case", kind, ext);
+      if ("error" in res) {
+        setError(res.error);
+        return;
+      }
+      // 2) 브라우저 → Supabase Storage 직접 업로드
+      const supabase = createSupabaseBrowserClient();
+      const { error: upErr } = await supabase.storage
+        .from("portfolio-media")
+        .uploadToSignedUrl(res.path, res.token, file, { contentType: file.type });
+      if (upErr) {
+        setError("업로드 실패: " + upErr.message);
+        return;
+      }
+      // 3) 공개 URL 저장
+      const { data } = supabase.storage.from("portfolio-media").getPublicUrl(res.path);
+      onChange(data.publicUrl);
     } catch {
-      setError("업로드 실패 — 파일이 너무 크거나 네트워크 문제일 수 있습니다. 다시 시도해주세요.");
+      setError("업로드 실패 — 네트워크 문제일 수 있습니다. 다시 시도해주세요.");
     } finally {
       setBusy(false);
     }
