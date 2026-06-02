@@ -5,10 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion, type PanInfo } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import type { Case } from "@/lib/portfolio";
+import type { SiteContent } from "@/data/content";
 
 const SWIPE_THRESHOLD = 70;
 
-export function Portfolio({ cases }: { cases: Case[] }) {
+export function Portfolio({ cases, intro }: { cases: Case[]; intro: SiteContent["portfolio"] }) {
   const [active, setActive] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const reduceMotion = useReducedMotion();
@@ -46,13 +47,13 @@ export function Portfolio({ cases }: { cases: Case[] }) {
     <section id="portfolio" className="bg-[#18191B] px-5 py-24 sm:px-8 lg:py-36">
       <div className="mx-auto max-w-[1500px]">
         <div data-reveal className="mb-14 grid gap-6 lg:grid-cols-[0.42fr_1fr] lg:items-end">
-          <p className="font-display text-xs uppercase tracking-[0.4em] text-[#D6B77A]">— 03 / Portfolio</p>
+          <p className="font-display text-xs uppercase tracking-[0.4em] text-[#D6B77A]">{intro.label}</p>
           <div>
-            <h2 className="font-kr text-[2.2rem] font-light leading-[1.12] tracking-[-0.03em] text-[#F4EFE5] sm:text-[3.4rem]">
-              단순 결과가 아니라,<br />비즈니스 케이스로 증명합니다.
+            <h2 className="whitespace-pre-line font-kr text-[2.2rem] font-light leading-[1.12] tracking-[-0.03em] text-[#F4EFE5] sm:text-[3.4rem]">
+              {intro.headline}
             </h2>
             <p className="mt-6 max-w-2xl font-kr leading-8 text-[#A7A39B]">
-              각 프로젝트는 업종의 본질, 병목, 전략, 결과를 하나의 성장 구조로 해석합니다.
+              {intro.description}
             </p>
           </div>
         </div>

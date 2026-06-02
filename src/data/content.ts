@@ -29,6 +29,11 @@ export type SiteContent = {
     title: string;
     items: FrameworkItem[];
   };
+  portfolio: {
+    label: string;
+    headline: string;
+    description: string;
+  };
   cta: {
     label: string;
     headline: string;
@@ -83,6 +88,11 @@ export const defaultContent: SiteContent = {
       { code: "CONVERT", title: "전환되는 구조", body: "문의DB, 상담 흐름, CTA, 폼 마찰을 함께 보며 광고 이후의 병목을 줄입니다." },
       { code: "AUTOMATE", title: "쌓이는 구조", body: "리포트, CRM, 자동화 루틴을 연결해 다음 실험이 빨라지는 운영 체계를 만듭니다." },
     ],
+  },
+  portfolio: {
+    label: "— 03 / Portfolio",
+    headline: "단순 결과가 아니라,\n비즈니스 케이스로 증명합니다.",
+    description: "각 프로젝트는 업종의 본질, 병목, 전략, 결과를 하나의 성장 구조로 해석합니다.",
   },
   cta: {
     label: "— 05 / Growth Diagnosis",

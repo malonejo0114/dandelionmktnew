@@ -181,6 +181,11 @@ function parseSiteContent(formData: FormData): SiteContent {
       title: str(formData, "fw_title"),
       items,
     },
+    portfolio: {
+      label: str(formData, "pf_label"),
+      headline: str(formData, "pf_headline"),
+      description: str(formData, "pf_description"),
+    },
     cta: {
       label: str(formData, "cta_label"),
       headline: str(formData, "cta_headline"),

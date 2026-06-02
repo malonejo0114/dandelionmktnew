@@ -35,7 +35,7 @@ export function LandingPage({ cases, content }: { cases: Case[]; content: SiteCo
         <Marquee words={content.common.marqueeWords} />
         <About about={content.about} />
         <Framework framework={content.framework} />
-        <Portfolio cases={cases} />
+        <Portfolio cases={cases} intro={content.portfolio} />
         <Journal />
         <GrowthCTA cta={content.cta} />
       </main>

@@ -16,6 +16,7 @@ export async function getSiteContent(): Promise<SiteContent> {
     hero: { ...defaultContent.hero, ...(c.hero ?? {}) },
     about: { ...defaultContent.about, ...(c.about ?? {}) },
     framework: { ...defaultContent.framework, ...(c.framework ?? {}) },
+    portfolio: { ...defaultContent.portfolio, ...(c.portfolio ?? {}) },
     cta: { ...defaultContent.cta, ...(c.cta ?? {}) },
     common: { ...defaultContent.common, ...(c.common ?? {}) },
   };

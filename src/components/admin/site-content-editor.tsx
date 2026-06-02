@@ -80,6 +80,12 @@ export function SiteContentEditor({ initial }: { initial: SiteContent }) {
         ))}
       </Group>
 
+      <Group title="Portfolio (섹션 소개)">
+        <Text label="라벨" name="pf_label" def={c.portfolio.label} />
+        <Text label="헤드라인 (줄바꿈=엔터)" name="pf_headline" def={c.portfolio.headline} ta />
+        <Text label="설명" name="pf_description" def={c.portfolio.description} ta />
+      </Group>
+
       <Group title="Growth CTA">
         <Text label="라벨" name="cta_label" def={c.cta.label} />
         <Text label="헤드라인 (줄바꿈=엔터)" name="cta_headline" def={c.cta.headline} ta />
