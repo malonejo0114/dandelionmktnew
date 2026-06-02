@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isAllowedAdmin, getAdminEmail } from "@/lib/admin-auth";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import type { SiteContent } from "@/data/content";
 
 export type AuthState = { status: "idle" | "error"; message: string };
 
@@ -130,4 +131,84 @@ export async function createUploadUrl(slug: string, kind: string, ext: string): 
   const { data, error } = await supabase.storage.from("portfolio-media").createSignedUploadUrl(path);
   if (error || !data) return { error: "업로드 URL 생성 실패." };
   return { path: data.path, token: data.token };
+}
+
+function str(formData: FormData, key: string): string {
+  return String(formData.get(key) ?? "");
+}
+
+function parseSiteContent(formData: FormData): SiteContent {
+  const lines = (key: string) =>
+    str(formData, key).split("\n").map((s) => s.trim()).filter(Boolean);
+  const keywords = [0, 1, 2, 3].map((i) => ({
+    kr: str(formData, `hero_kw_kr_${i}`),
+    en: str(formData, `hero_kw_en_${i}`),
+  }));
+  const items = [0, 1, 2, 3].map((i) => ({
+    code: str(formData, `fw_code_${i}`),
+    title: str(formData, `fw_title_${i}`),
+    body: str(formData, `fw_body_${i}`),
+  }));
+  const proofs = [0, 1, 2, 3].map((i) => str(formData, `about_proof_${i}`));
+  const nav = [0, 1, 2, 3].map((i) => ({
+    label: str(formData, `nav_label_${i}`),
+    href: str(formData, `nav_href_${i}`),
+  }));
+  return {
+    hero: {
+      agencyTag: str(formData, "hero_agencyTag"),
+      overline: str(formData, "hero_overline"),
+      headPrefix: str(formData, "hero_headPrefix"),
+      keywords,
+      keywordSuffix: str(formData, "hero_keywordSuffix"),
+      headSuffix: str(formData, "hero_headSuffix"),
+      support: str(formData, "hero_support"),
+      ctaPrimaryLabel: str(formData, "hero_ctaPrimaryLabel"),
+      ctaPrimaryHref: str(formData, "hero_ctaPrimaryHref"),
+      ctaSecondaryLabel: str(formData, "hero_ctaSecondaryLabel"),
+      ctaSecondaryHref: str(formData, "hero_ctaSecondaryHref"),
+    },
+    about: {
+      label: str(formData, "about_label"),
+      headline: str(formData, "about_headline"),
+      headlineAccent: str(formData, "about_headlineAccent"),
+      lead: str(formData, "about_lead"),
+      body: str(formData, "about_body"),
+      proofs,
+    },
+    framework: {
+      label: str(formData, "fw_label"),
+      title: str(formData, "fw_title"),
+      items,
+    },
+    cta: {
+      label: str(formData, "cta_label"),
+      headline: str(formData, "cta_headline"),
+      description: str(formData, "cta_description"),
+      compliance: lines("cta_compliance"),
+    },
+    common: {
+      brandName: str(formData, "common_brandName"),
+      corpName: str(formData, "common_corpName"),
+      contactLabel: str(formData, "common_contactLabel"),
+      mobileCtaLabel: str(formData, "common_mobileCtaLabel"),
+      nav,
+      marqueeWords: lines("common_marqueeWords"),
+      footerTagline: str(formData, "common_footerTagline"),
+    },
+  };
+}
+
+export async function updateSiteContent(formData: FormData) {
+  await assertAdmin();
+  const supabase = getSupabaseAdmin();
+  if (!supabase) throw new Error("supabase not configured");
+  const content = parseSiteContent(formData);
+  const { error } = await supabase
+    .from("site_content")
+    .upsert({ id: "singleton", content });
+  if (error) throw new Error(`저장 실패: ${error.message}`);
+  revalidatePath("/");
+  revalidatePath("/admin/content");
+  redirect("/admin/content");
 }
