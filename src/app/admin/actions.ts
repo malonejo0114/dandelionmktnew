@@ -2,27 +2,25 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isAllowedAdmin, getAdminEmail } from "@/lib/admin-auth";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
-export type AuthState = { status: "idle" | "sent" | "error"; message: string };
+export type AuthState = { status: "idle" | "error"; message: string };
 
-export async function requestMagicLink(_prev: AuthState, formData: FormData): Promise<AuthState> {
+export async function signInWithPassword(_prev: AuthState, formData: FormData): Promise<AuthState> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  if (!email) return { status: "error", message: "이메일을 입력해주세요." };
+  const password = String(formData.get("password") ?? "");
+  if (!email || !password) return { status: "error", message: "이메일과 비밀번호를 입력해주세요." };
   if (!isAllowedAdmin(email)) {
     return { status: "error", message: "허용되지 않은 이메일입니다." };
   }
   const supabase = await createSupabaseServerClient();
-  const origin = (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL ?? "";
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: `${origin}/auth/callback?next=/admin` },
-  });
-  if (error) return { status: "error", message: "발송 실패. 잠시 후 다시 시도해주세요." };
-  return { status: "sent", message: "로그인 링크를 이메일로 보냈습니다. 메일함을 확인해주세요." };
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    return { status: "error", message: "로그인 실패 — 이메일 또는 비밀번호를 확인해주세요." };
+  }
+  redirect("/admin");
 }
 
 export async function signOut() {
