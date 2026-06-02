@@ -18,14 +18,19 @@ export function MediaUpload({
 
   async function handleFile(file: File) {
     setBusy(true); setError("");
-    const fd = new FormData();
-    fd.set("file", file);
-    fd.set("slug", slug || "case");
-    fd.set("kind", kind);
-    const res: UploadResult = await uploadMedia(fd);
-    setBusy(false);
-    if ("url" in res) onChange(res.url);
-    else setError(res.error);
+    try {
+      const fd = new FormData();
+      fd.set("file", file);
+      fd.set("slug", slug || "case");
+      fd.set("kind", kind);
+      const res: UploadResult = await uploadMedia(fd);
+      if ("url" in res) onChange(res.url);
+      else setError(res.error);
+    } catch {
+      setError("업로드 실패 — 파일이 너무 크거나 네트워크 문제일 수 있습니다. 다시 시도해주세요.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
