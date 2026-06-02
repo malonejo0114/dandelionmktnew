@@ -25,7 +25,7 @@ export function Hero() {
     <section className="relative flex min-h-[100dvh] items-center overflow-hidden px-5 pb-16 pt-28 sm:px-8">
       <HeroBackground />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-[1500px] gap-12 lg:grid-cols-[1fr_auto] lg:items-end">
+      <div className="relative z-10 mx-auto w-full max-w-[1500px]">
         <div>
           <div data-hero-mark className="mb-7 flex items-center gap-3">
             <DandelionMark className="size-9" />
@@ -53,21 +53,6 @@ export function Hero() {
             단순한 노출이 아니라, 상품과 업장의 본질에 맞는 구조를 설계해 브랜드의 지속 가능한 성장을 만듭니다.
           </p>
 
-          {/* 모바일 키워드 그리드 */}
-          <div className="mt-8 grid grid-cols-2 gap-px border border-[#343437] bg-[#343437] lg:hidden">
-            {KEYWORDS.map((k, i) => (
-              <div
-                key={k.en}
-                className={`flex items-center justify-between px-4 py-3 ${
-                  active === i ? "bg-[#1d1e22] text-[#F4EFE5]" : "bg-[#15161a] text-[#5e5d59]"
-                }`}
-              >
-                <span className="font-kr text-sm">{`0${i + 1} ${k.kr}`}</span>
-                <span className={active === i ? "text-[#D6B77A]" : ""}>›</span>
-              </div>
-            ))}
-          </div>
-
           <div data-hero-cta className="mt-9 flex flex-col gap-3 sm:flex-row">
             <a
               href="#cta"
@@ -84,21 +69,6 @@ export function Hero() {
               <ArrowUpRight className="ml-4 size-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
             </a>
           </div>
-        </div>
-
-        {/* 데스크탑 키워드 인덱스 레일 */}
-        <div data-hero-rail className="hidden min-w-[200px] border-l border-[#343437] pl-6 lg:block">
-          {KEYWORDS.map((k, i) => (
-            <div
-              key={k.en}
-              className={`flex items-center justify-between gap-8 border-b border-[#343437]/60 py-4 font-display text-sm uppercase tracking-[0.18em] transition-colors duration-500 ${
-                active === i ? "text-[#F4EFE5]" : "text-[#5e5d59]"
-              }`}
-            >
-              <span>{`0${i + 1}`}</span>
-              <span className={active === i ? "font-kr text-[#D6B77A]" : "font-kr"}>{k.kr}</span>
-            </div>
-          ))}
         </div>
       </div>
 
