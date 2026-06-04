@@ -1,8 +1,6 @@
 import { LeadForm } from "@/components/lead-form";
 import type { SiteContent } from "@/data/content";
 
-const cleanLabel = (s: string) => s.replace(/^—\s*\d+\s*\/\s*/, "");
-
 export function GrowthCTA({ cta }: { cta: SiteContent["cta"] }) {
   return (
     <section id="cta" className="relative overflow-hidden bg-[#111214] px-5 py-24 sm:px-8 lg:py-36">
@@ -11,8 +9,7 @@ export function GrowthCTA({ cta }: { cta: SiteContent["cta"] }) {
 
       <div className="relative mx-auto max-w-[760px]">
         <div data-reveal className="text-center">
-          <p className="font-display text-xs uppercase tracking-[0.4em] text-[#D6B77A]">{cleanLabel(cta.label)}</p>
-          <h2 className="mx-auto mt-5 max-w-3xl whitespace-pre-line font-kr text-[2.2rem] font-light leading-[1.2] tracking-[-0.03em] text-[#F4EFE5] sm:text-[3.4rem]">
+          <h2 className="mx-auto max-w-3xl whitespace-pre-line font-kr text-[2.2rem] font-light leading-[1.2] tracking-[-0.03em] text-[#F4EFE5] sm:text-[3.4rem]">
             {cta.headline}
           </h2>
           <p className="mx-auto mt-6 max-w-xl font-kr text-lg leading-8 text-[#D8D3CA]">

@@ -1,14 +1,11 @@
 import type { SiteContent } from "@/data/content";
 
-const cleanLabel = (s: string) => s.replace(/^—\s*\d+\s*\/\s*/, "");
-
 export function Framework({ framework }: { framework: SiteContent["framework"] }) {
   return (
     <section id="framework" className="bg-[#111214] px-5 py-24 sm:px-8 lg:py-36">
       <div className="mx-auto max-w-[1500px]">
         <div data-reveal className="mb-16 border-b border-[#343437] pb-10 text-center">
-          <p className="font-display text-xs uppercase tracking-[0.4em] text-[#D6B77A]">{cleanLabel(framework.label)}</p>
-          <h2 className="mt-5 font-display text-5xl uppercase leading-[0.95] tracking-[0.03em] text-[#F4EFE5] sm:text-7xl lg:text-8xl">
+          <h2 className="font-display text-5xl uppercase leading-[0.95] tracking-[0.03em] text-[#F4EFE5] sm:text-7xl lg:text-8xl">
             {framework.title}
           </h2>
         </div>

@@ -1,16 +1,11 @@
 import type { SiteContent } from "@/data/content";
 
-const cleanLabel = (s: string) => s.replace(/^—\s*\d+\s*\/\s*/, "");
-
 export function About({ about }: { about: SiteContent["about"] }) {
   return (
     <section id="about" className="relative bg-[#18191B] px-5 py-24 sm:px-8 lg:py-36">
       <div className="mx-auto max-w-[1100px]">
         <div data-reveal className="text-center">
-          <p className="font-display text-xs uppercase tracking-[0.4em] text-[#D6B77A]">
-            {cleanLabel(about.label)}
-          </p>
-          <h2 className="mx-auto mt-5 max-w-3xl whitespace-pre-line font-kr text-[2.2rem] font-light leading-[1.2] tracking-[-0.03em] text-[#F4EFE5] sm:text-[3.4rem]">
+          <h2 className="mx-auto max-w-3xl whitespace-pre-line font-kr text-[2.2rem] font-light leading-[1.2] tracking-[-0.03em] text-[#F4EFE5] sm:text-[3.4rem]">
             {about.headline}
             <span className="mt-4 block whitespace-pre-line font-medium text-[#E7D2A0]">
               {about.headlineAccent}

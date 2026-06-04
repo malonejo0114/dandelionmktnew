@@ -7,8 +7,7 @@ export function Journal({ posts }: { posts: Post[] }) {
     <section id="journal" className="bg-[#F4EFE5] px-5 py-24 text-[#111214] sm:px-8 lg:py-36">
       <div className="mx-auto max-w-[1500px]">
         <div data-reveal className="mb-14 text-center">
-          <p className="font-display text-xs uppercase tracking-[0.4em] text-[#8F6E32]">Journal</p>
-          <h2 className="mt-5 font-display text-5xl uppercase leading-[0.95] tracking-[0.03em] sm:text-7xl lg:text-8xl">Editorial Authority</h2>
+          <h2 className="font-display text-5xl uppercase leading-[0.95] tracking-[0.03em] sm:text-7xl lg:text-8xl">Editorial Authority</h2>
           <p className="mx-auto mt-6 max-w-2xl font-kr text-base leading-8 text-[#59564F]">SEO 유입을 위한 글도 가벼운 팁이 아니라, 대표자가 의사결정을 내릴 수 있는 전략 문서처럼 설계합니다.</p>
         </div>
 
