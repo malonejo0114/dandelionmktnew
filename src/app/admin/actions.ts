@@ -204,6 +204,14 @@ function parseSiteContent(formData: FormData): SiteContent {
   };
 }
 
+export async function deleteLead(id: string) {
+  await assertAdmin();
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return;
+  await supabase.from("leads").delete().eq("id", id);
+  revalidatePath("/admin/leads");
+}
+
 export async function updateSiteContent(formData: FormData) {
   await assertAdmin();
   const supabase = getSupabaseAdmin();
