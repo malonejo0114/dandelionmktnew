@@ -8,6 +8,7 @@ import type { Case } from "@/lib/portfolio";
 import type { SiteContent } from "@/data/content";
 
 const SWIPE_THRESHOLD = 70;
+const cleanLabel = (s: string) => s.replace(/^—\s*\d+\s*\/\s*/, "");
 
 export function Portfolio({ cases, intro }: { cases: Case[]; intro: SiteContent["portfolio"] }) {
   const [active, setActive] = useState(0);
@@ -46,16 +47,14 @@ export function Portfolio({ cases, intro }: { cases: Case[]; intro: SiteContent[
   return (
     <section id="portfolio" className="bg-[#18191B] px-5 py-24 sm:px-8 lg:py-36">
       <div className="mx-auto max-w-[1500px]">
-        <div data-reveal className="mb-14 grid gap-6 lg:grid-cols-[0.42fr_1fr] lg:items-end">
-          <p className="font-display text-xs uppercase tracking-[0.4em] text-[#D6B77A]">{intro.label}</p>
-          <div>
-            <h2 className="whitespace-pre-line font-kr text-[2.2rem] font-light leading-[1.12] tracking-[-0.03em] text-[#F4EFE5] sm:text-[3.4rem]">
-              {intro.headline}
-            </h2>
-            <p className="mt-6 max-w-2xl font-kr leading-8 text-[#A7A39B]">
-              {intro.description}
-            </p>
-          </div>
+        <div data-reveal className="mb-14 text-center">
+          <p className="font-display text-xs uppercase tracking-[0.4em] text-[#D6B77A]">{cleanLabel(intro.label)}</p>
+          <h2 className="mx-auto mt-5 max-w-3xl whitespace-pre-line font-kr text-[2.2rem] font-light leading-[1.2] tracking-[-0.03em] text-[#F4EFE5] sm:text-[3.4rem]">
+            {intro.headline}
+          </h2>
+          <p className="mx-auto mt-6 max-w-2xl font-kr leading-8 text-[#A7A39B]">
+            {intro.description}
+          </p>
         </div>
 
         <div data-reveal className="grid items-center gap-14 lg:grid-cols-[auto_1fr] lg:gap-16">
