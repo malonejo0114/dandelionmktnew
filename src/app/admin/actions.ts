@@ -192,6 +192,13 @@ function parseSiteContent(formData: FormData): SiteContent {
       description: str(formData, "cta_description"),
       compliance: lines("cta_compliance"),
     },
+    seo: {
+      title: str(formData, "seo_title"),
+      titleTemplate: str(formData, "seo_titleTemplate"),
+      description: str(formData, "seo_description"),
+      ogTitle: str(formData, "seo_ogTitle"),
+      ogDescription: str(formData, "seo_ogDescription"),
+    },
     common: {
       brandName: str(formData, "common_brandName"),
       corpName: str(formData, "common_corpName"),

@@ -40,6 +40,13 @@ export type SiteContent = {
     description: string;
     compliance: string[];
   };
+  seo: {
+    title: string;
+    titleTemplate: string;
+    description: string;
+    ogTitle: string;
+    ogDescription: string;
+  };
   common: {
     brandName: string;
     corpName: string;
@@ -102,6 +109,14 @@ export const defaultContent: SiteContent = {
       "Meta, Facebook, Instagram과 공식 제휴 관계를 의미하지 않습니다.",
       "광고 성과는 업종, 예산, 기간, 운영 상태에 따라 달라질 수 있습니다.",
     ],
+  },
+  seo: {
+    title: "Dandelion Effect | 브랜드가 퍼지는 구조를 설계합니다",
+    titleTemplate: "%s | Dandelion Effect",
+    description:
+      "주식회사 민들레효과는 브랜드가 검색되고, 기억되고, 확산되고, 전환되는 구조를 설계하는 프리미엄 마케팅 에이전시입니다.",
+    ogTitle: "Dandelion Effect | 브랜드 성장 설계 회사",
+    ogDescription: "광고 운영을 넘어 검색, 확산, 전환, 자동화까지 이어지는 성장 구조를 설계합니다.",
   },
   common: {
     brandName: "Dandelion Effect",

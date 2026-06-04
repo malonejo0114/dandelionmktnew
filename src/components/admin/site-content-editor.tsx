@@ -111,6 +111,14 @@ export function SiteContentEditor({ initial }: { initial: SiteContent }) {
         <Text label="푸터 태그라인" name="common_footerTagline" def={c.common.footerTagline} />
       </Group>
 
+      <Group title="SEO (검색/공유 메타)">
+        <Text label="사이트 제목" name="seo_title" def={c.seo.title} />
+        <Text label="제목 템플릿 (%s = 페이지명)" name="seo_titleTemplate" def={c.seo.titleTemplate} />
+        <Text label="설명(description)" name="seo_description" def={c.seo.description} ta />
+        <Text label="OG 제목" name="seo_ogTitle" def={c.seo.ogTitle} />
+        <Text label="OG 설명" name="seo_ogDescription" def={c.seo.ogDescription} ta />
+      </Group>
+
       <div className="flex gap-3">
         <button type="submit" className="bg-[#D6B77A] px-6 py-3 font-display text-xs uppercase tracking-[0.16em] text-[#111214] hover:bg-[#E7D2A0]">저장</button>
         <a href="/admin" className="border border-[#343437] px-6 py-3 font-display text-xs uppercase tracking-[0.16em] text-[#F4EFE5] hover:border-[#D6B77A]">취소</a>
