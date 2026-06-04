@@ -47,7 +47,7 @@ export function Portfolio({ cases, intro }: { cases: Case[]; intro: SiteContent[
     <section id="portfolio" className="bg-[#18191B] px-5 py-24 sm:px-8 lg:py-36">
       <div className="mx-auto max-w-[1500px]">
         <div data-reveal className="mb-14 text-center">
-          <h2 className="mx-auto max-w-3xl whitespace-pre-line font-kr text-[2.2rem] font-light leading-[1.2] tracking-[-0.03em] text-[#F4EFE5] sm:text-[3.4rem]">
+          <h2 className="font-display text-5xl uppercase leading-[0.95] tracking-[0.03em] text-[#F4EFE5] sm:text-7xl lg:text-8xl">
             {intro.headline}
           </h2>
           <p className="mx-auto mt-6 max-w-2xl font-kr leading-8 text-[#A7A39B]">
