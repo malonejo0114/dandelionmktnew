@@ -207,6 +207,7 @@ function parseSiteContent(formData: FormData): SiteContent {
       nav,
       marqueeWords: lines("common_marqueeWords"),
       footerTagline: str(formData, "common_footerTagline"),
+      kakaoUrl: str(formData, "common_kakaoUrl"),
     },
   };
 }

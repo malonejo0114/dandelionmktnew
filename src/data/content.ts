@@ -55,6 +55,7 @@ export type SiteContent = {
     nav: NavItem[];
     marqueeWords: string[];
     footerTagline: string;
+    kakaoUrl: string;
   };
 };
 
@@ -131,5 +132,6 @@ export const defaultContent: SiteContent = {
     ],
     marqueeWords: ["SEARCH", "SPREAD", "CONVERT", "AUTOMATE", "BRAND SYSTEM", "GROWTH STRUCTURE"],
     footerTagline: "주식회사 민들레효과 · Premium Growth Agency",
+    kakaoUrl: "",
   },
 };

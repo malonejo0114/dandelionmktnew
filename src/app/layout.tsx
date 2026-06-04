@@ -3,6 +3,7 @@ import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { getSiteContent } from "@/lib/site-content";
+import { FloatingKakao } from "@/components/floating-kakao";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -54,19 +55,18 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const content = await getSiteContent();
   return (
-    <html
-      lang="ko"
-      className={`${cormorant.variable} dark`}
-    >
+    <html lang="ko" className={`${cormorant.variable} dark`}>
       <body>
         <SmoothScroll />
         {children}
+        <FloatingKakao url={content.common.kakaoUrl} />
         <div className="noise-overlay" aria-hidden="true" />
       </body>
     </html>
