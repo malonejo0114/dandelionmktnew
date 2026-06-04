@@ -233,3 +233,86 @@ export async function updateSiteContent(formData: FormData) {
   revalidatePath("/admin/content");
   redirect("/admin/content");
 }
+
+// === Blog ===
+export async function createBlogUploadUrl(slugOrTmp: string, kind: string, ext: string): Promise<SignedUpload> {
+  await assertAdmin();
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return { error: "supabase not configured" };
+  const safe = (slugOrTmp || "post").replace(/[^a-zA-Z0-9-_]/g, "-").toLowerCase() || "post";
+  const safeKind = (kind || "img").replace(/[^a-z0-9]/gi, "").toLowerCase() || "img";
+  const safeExt = (ext || "bin").toLowerCase().replace(/[^a-z0-9]/g, "") || "bin";
+  const path = `posts/${safe}/${safeKind}-${Date.now()}.${safeExt}`;
+  const { data, error } = await supabase.storage.from("blog-media").createSignedUploadUrl(path);
+  if (error || !data) return { error: "업로드 URL 생성 실패." };
+  return { path: data.path, token: data.token };
+}
+
+function parsePostForm(formData: FormData) {
+  const qs = formData.getAll("faq_q").map(String);
+  const as = formData.getAll("faq_a").map(String);
+  const faqs = qs.map((q, i) => ({ q: q.trim(), a: (as[i] ?? "").trim() })).filter((f) => f.q || f.a);
+  const status = formData.get("status") === "published" ? "published" : "draft";
+  const s = (k: string) => String(formData.get(k) ?? "").trim();
+  return {
+    slug: s("slug"),
+    title: s("title"),
+    category: s("category") || "Marketing",
+    status,
+    excerpt: s("excerpt"),
+    cover_url: s("cover_url") || null,
+    content_html: String(formData.get("content_html") ?? ""),
+    summary: s("summary"),
+    faqs,
+    seo_title: s("seo_title"),
+    seo_description: s("seo_description"),
+    reading_time: s("reading_time") || "5 min read",
+  };
+}
+
+export async function createPost(formData: FormData) {
+  await assertAdmin();
+  const supabase = getSupabaseAdmin();
+  if (!supabase) throw new Error("supabase not configured");
+  const p = parsePostForm(formData);
+  if (!p.slug || !p.title) throw new Error("slug/title required");
+  const published_at = p.status === "published" ? new Date().toISOString() : null;
+  const { error } = await supabase.from("posts").insert({ ...p, published_at });
+  if (error) throw new Error(`저장 실패: ${error.message}`);
+  revalidatePath("/"); revalidatePath("/blog"); revalidatePath("/blog/[slug]", "page"); revalidatePath("/admin/blog");
+  redirect("/admin/blog");
+}
+
+export async function updatePost(id: string, formData: FormData) {
+  await assertAdmin();
+  const supabase = getSupabaseAdmin();
+  if (!supabase) throw new Error("supabase not configured");
+  const p = parsePostForm(formData);
+  const { data: cur } = await supabase.from("posts").select("status,published_at").eq("id", id).maybeSingle();
+  let published_at = cur?.published_at ?? null;
+  if (p.status === "published" && !published_at) published_at = new Date().toISOString();
+  if (p.status !== "published") published_at = null;
+  const { error } = await supabase.from("posts").update({ ...p, published_at }).eq("id", id);
+  if (error) throw new Error(`수정 실패: ${error.message}`);
+  revalidatePath("/"); revalidatePath("/blog"); revalidatePath("/blog/[slug]", "page"); revalidatePath("/admin/blog");
+  redirect("/admin/blog");
+}
+
+export async function deletePost(id: string) {
+  await assertAdmin();
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return;
+  await supabase.from("posts").delete().eq("id", id);
+  revalidatePath("/"); revalidatePath("/blog"); revalidatePath("/blog/[slug]", "page"); revalidatePath("/admin/blog");
+}
+
+export async function togglePostStatus(id: string) {
+  await assertAdmin();
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return;
+  const { data } = await supabase.from("posts").select("status,published_at").eq("id", id).maybeSingle();
+  const next = data?.status === "published" ? "draft" : "published";
+  const published_at = next === "published" ? (data?.published_at ?? new Date().toISOString()) : null;
+  await supabase.from("posts").update({ status: next, published_at }).eq("id", id);
+  revalidatePath("/"); revalidatePath("/blog"); revalidatePath("/blog/[slug]", "page"); revalidatePath("/admin/blog");
+}
