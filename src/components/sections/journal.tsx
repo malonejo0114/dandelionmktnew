@@ -15,7 +15,18 @@ export function Journal({ posts }: { posts: Post[] }) {
           {items.map((post, i) => (
             <Link key={post.slug} href={`/blog/${post.slug}`} data-reveal className="group grid min-h-[460px] grid-rows-[200px_1fr] bg-[#F4EFE5] transition-colors duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-[#111214] hover:text-[#F4EFE5]">
               <div className="relative overflow-hidden bg-[#18191b]">
-                {post.coverUrl ? (
+                {post.coverVideoUrl ? (
+                  <video
+                    src={post.coverVideoUrl}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    poster={post.coverUrl ?? undefined}
+                    className="h-full w-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                  />
+                ) : post.coverUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={post.coverUrl} alt="" className="h-full w-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105" />
                 ) : (
@@ -27,6 +38,9 @@ export function Journal({ posts }: { posts: Post[] }) {
                 <div>
                   <p className="font-display text-xs uppercase tracking-[0.24em] text-[#8F6E32] group-hover:text-[#D6B77A]">{post.category}{post.publishedAt ? ` · ${post.publishedAt.slice(0, 10)}` : ""}</p>
                   <h3 className="mt-7 font-kr text-xl font-medium leading-snug">{post.title}</h3>
+                  {post.excerpt ? (
+                    <p className="mt-3 line-clamp-3 font-kr text-sm leading-7 text-[#59564F] group-hover:text-[#A7A39B]">{post.excerpt}</p>
+                  ) : null}
                 </div>
                 <div className="mt-10 h-px w-full bg-[#D6B77A]/55 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:w-2/3" />
               </div>

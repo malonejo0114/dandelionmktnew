@@ -261,6 +261,7 @@ function parsePostForm(formData: FormData) {
     status,
     excerpt: s("excerpt"),
     cover_url: s("cover_url") || null,
+    cover_video_url: s("cover_video_url") || null,
     content_html: String(formData.get("content_html") ?? ""),
     summary: s("summary"),
     faqs,

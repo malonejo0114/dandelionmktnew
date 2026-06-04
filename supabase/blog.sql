@@ -7,6 +7,7 @@ create table if not exists public.posts (
   published_at timestamptz,
   excerpt text not null default '',
   cover_url text,
+  cover_video_url text,
   content_html text not null default '',
   summary text not null default '',
   faqs jsonb not null default '[]'::jsonb,

@@ -12,7 +12,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
   if (!data) notFound();
   const initial: PostFormValues = {
     slug: data.slug, title: data.title, category: data.category, status: data.status,
-    excerpt: data.excerpt ?? "", coverUrl: data.cover_url ?? "", contentHtml: data.content_html ?? "",
+    excerpt: data.excerpt ?? "", coverUrl: data.cover_url ?? "", coverVideoUrl: data.cover_video_url ?? "", contentHtml: data.content_html ?? "",
     summary: data.summary ?? "", faqs: (Array.isArray(data.faqs) ? data.faqs : []) as Faq[],
     seoTitle: data.seo_title ?? "", seoDescription: data.seo_description ?? "", readingTime: data.reading_time ?? "5 min read",
   };

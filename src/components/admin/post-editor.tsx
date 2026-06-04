@@ -8,13 +8,13 @@ import type { Faq } from "@/lib/posts";
 
 export type PostFormValues = {
   slug: string; title: string; category: string; status: string; excerpt: string;
-  coverUrl: string; contentHtml: string; summary: string; faqs: Faq[];
+  coverUrl: string; coverVideoUrl: string; contentHtml: string; summary: string; faqs: Faq[];
   seoTitle: string; seoDescription: string; readingTime: string;
 };
 
 const empty: PostFormValues = {
   slug: "", title: "", category: "Marketing", status: "draft", excerpt: "",
-  coverUrl: "", contentHtml: "", summary: "", faqs: [{ q: "", a: "" }],
+  coverUrl: "", coverVideoUrl: "", contentHtml: "", summary: "", faqs: [{ q: "", a: "" }],
   seoTitle: "", seoDescription: "", readingTime: "5 min read",
 };
 
@@ -35,6 +35,7 @@ export function PostEditor({ action, initial }: { action: (fd: FormData) => void
   const init = initial ?? empty;
   const [slug, setSlug] = useState(init.slug);
   const [cover, setCover] = useState(init.coverUrl);
+  const [coverVideo, setCoverVideo] = useState(init.coverVideoUrl);
   const [html, setHtml] = useState(init.contentHtml);
   const [faqs, setFaqs] = useState<Faq[]>(init.faqs.length ? init.faqs : [{ q: "", a: "" }]);
 
@@ -55,6 +56,13 @@ export function PostEditor({ action, initial }: { action: (fd: FormData) => void
         <p className="mb-2 font-display text-[11px] uppercase tracking-[0.2em] text-[#8B8B86]">대표 이미지</p>
         <MediaUpload kind="poster" slug={slug} value={cover} onChange={setCover} accept="image/*" />
         <input type="hidden" name="cover_url" value={cover} />
+      </div>
+
+      <div>
+        <p className="mb-2 font-display text-[11px] uppercase tracking-[0.2em] text-[#8B8B86]">대표 영상 (선택)</p>
+        <p className="mb-2 font-kr text-xs text-[#8B8B86]">홈 저널 카드에서 자동 재생됩니다(음소거·반복). 영상이 없으면 위 대표 이미지가 사용됩니다.</p>
+        <MediaUpload kind="video" slug={slug} value={coverVideo} onChange={setCoverVideo} accept="video/*" />
+        <input type="hidden" name="cover_video_url" value={coverVideo} />
       </div>
 
       <div>
