@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
-import { getAllPosts } from "@/lib/blog";
+import { getPublishedPosts } from "@/lib/posts";
 import { getPublishedCases } from "@/lib/portfolio";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://dandelionmkt.co.kr";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = getAllPosts().map((post) => ({
-    url: `${siteUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
+  const posts = await getPublishedPosts();
+  const blogUrls = posts.map((p) => ({
+    url: `${siteUrl}/blog/${p.slug}`,
+    lastModified: p.publishedAt ? new Date(p.publishedAt) : new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
@@ -33,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    ...posts,
+    ...blogUrls,
     ...caseUrls,
   ];
 }

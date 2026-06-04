@@ -14,8 +14,9 @@ import { SiteFooter } from "@/components/sections/site-footer";
 import { playHeroIntro, registerScrollReveal } from "@/lib/motion";
 import type { Case } from "@/lib/portfolio";
 import type { SiteContent } from "@/data/content";
+import type { Post } from "@/lib/posts";
 
-export function LandingPage({ cases, content }: { cases: Case[]; content: SiteContent }) {
+export function LandingPage({ cases, content, posts }: { cases: Case[]; content: SiteContent; posts: Post[] }) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export function LandingPage({ cases, content }: { cases: Case[]; content: SiteCo
         <About about={content.about} />
         <Framework framework={content.framework} />
         <Portfolio cases={cases} intro={content.portfolio} />
-        <Journal />
+        <Journal posts={posts} />
         <GrowthCTA cta={content.cta} />
       </main>
       <SiteFooter common={content.common} />
