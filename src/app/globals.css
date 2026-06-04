@@ -318,6 +318,14 @@
   }
 }
 
+.prose-editor h2 { font-size: 1.5rem; font-weight: 700; margin: 1rem 0 0.5rem; }
+.prose-editor h3 { font-size: 1.25rem; font-weight: 600; margin: 0.8rem 0 0.4rem; }
+.prose-editor p { margin: 0.5rem 0; line-height: 1.8; }
+.prose-editor ul { list-style: disc; padding-left: 1.4rem; margin: 0.5rem 0; }
+.prose-editor blockquote { border-left: 2px solid #d6b77a; padding-left: 1rem; color: #a7a39b; }
+.prose-editor img { max-width: 100%; border-radius: 6px; margin: 1rem 0; }
+.prose-editor a { color: #d6b77a; text-decoration: underline; }
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
