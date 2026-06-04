@@ -43,6 +43,9 @@ export default async function AdminDashboard() {
         <Link href="/admin/blog" className="inline-block border border-[#343437] px-6 py-3 font-display text-xs uppercase tracking-[0.18em] text-[#F4EFE5] hover:border-[#D6B77A]">
           블로그 →
         </Link>
+        <Link href="/admin/analytics" className="inline-block border border-[#343437] px-6 py-3 font-display text-xs uppercase tracking-[0.18em] text-[#F4EFE5] hover:border-[#D6B77A]">
+          분석 →
+        </Link>
       </div>
     </div>
   );

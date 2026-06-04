@@ -15,6 +15,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin/content" className="hover:text-[#D6B77A]">콘텐츠</Link>
           <Link href="/admin/blog" className="hover:text-[#D6B77A]">블로그</Link>
           <Link href="/admin/leads" className="hover:text-[#D6B77A]">문의함</Link>
+          <Link href="/admin/analytics" className="hover:text-[#D6B77A]">분석</Link>
           <Link href="/" className="text-[#8B8B86] hover:text-[#D6B77A]">사이트 보기</Link>
           {email ? (
             <form action={signOut}>

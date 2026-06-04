@@ -316,3 +316,24 @@ export async function togglePostStatus(id: string) {
   await supabase.from("posts").update({ status: next, published_at }).eq("id", id);
   revalidatePath("/"); revalidatePath("/blog"); revalidatePath("/blog/[slug]", "page"); revalidatePath("/admin/blog");
 }
+
+// === Tracking ===
+export async function createTrackingLink(formData: FormData) {
+  await assertAdmin();
+  const supabase = getSupabaseAdmin();
+  if (!supabase) throw new Error("supabase not configured");
+  const label = String(formData.get("label") ?? "").trim();
+  const code = String(formData.get("code") ?? "").trim().replace(/[^a-zA-Z0-9-_]/g, "").toLowerCase();
+  if (!code) throw new Error("code required");
+  const { error } = await supabase.from("tracking_links").insert({ code, label });
+  if (error) throw new Error(`생성 실패: ${error.message}`);
+  revalidatePath("/admin/analytics");
+}
+
+export async function deleteTrackingLink(id: string) {
+  await assertAdmin();
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return;
+  await supabase.from("tracking_links").delete().eq("id", id);
+  revalidatePath("/admin/analytics");
+}
