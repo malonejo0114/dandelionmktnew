@@ -1,5 +1,6 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
 export type LeadFormState = {
@@ -27,6 +28,8 @@ export async function submitLead(
     };
   }
 
+  const ref = (await cookies()).get("ref")?.value ?? null;
+
   const payload = {
     name: readField(formData, "name"),
     phone: readField(formData, "phone"),
@@ -36,6 +39,7 @@ export async function submitLead(
     challenge: readField(formData, "challenge"),
     marketing_consent: formData.get("marketingConsent") === "on",
     source: "dandelion-effect-homepage",
+    ref,
   };
 
   const supabase = getSupabaseAdmin();

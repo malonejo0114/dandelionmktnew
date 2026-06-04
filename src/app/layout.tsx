@@ -4,6 +4,8 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { getSiteContent } from "@/lib/site-content";
 import { FloatingKakao } from "@/components/floating-kakao";
+import { Analytics } from "@vercel/analytics/react";
+import { RefTracker } from "@/components/ref-tracker";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -67,6 +69,8 @@ export default async function RootLayout({
         <SmoothScroll />
         {children}
         <FloatingKakao url={content.common.kakaoUrl} />
+        <RefTracker />
+        <Analytics />
         <div className="noise-overlay" aria-hidden="true" />
       </body>
     </html>
