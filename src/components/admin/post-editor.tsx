@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { MediaUpload } from "@/components/admin/media-upload";
@@ -90,7 +91,7 @@ export function PostEditor({ action, initial }: { action: (fd: FormData) => void
 
       <div className="flex gap-3">
         <button type="submit" className="bg-[#D6B77A] px-6 py-3 font-display text-xs uppercase tracking-[0.16em] text-[#111214] hover:bg-[#E7D2A0]">저장</button>
-        <a href="/admin/blog" className="border border-[#343437] px-6 py-3 font-display text-xs uppercase tracking-[0.16em] text-[#F4EFE5] hover:border-[#D6B77A]">취소</a>
+        <Link href="/admin/blog" className="border border-[#343437] px-6 py-3 font-display text-xs uppercase tracking-[0.16em] text-[#F4EFE5] hover:border-[#D6B77A]">취소</Link>
       </div>
     </form>
   );
