@@ -110,6 +110,7 @@ export function SiteContentEditor({ initial }: { initial: SiteContent }) {
         <Text label="마키 키워드 (한 줄에 하나)" name="common_marqueeWords" def={c.common.marqueeWords.join("\n")} ta />
         <Text label="푸터 태그라인" name="common_footerTagline" def={c.common.footerTagline} />
         <Text label="카카오 채널 URL (비우면 버튼 숨김)" name="common_kakaoUrl" def={c.common.kakaoUrl} />
+        <Text label="유튜브 채널 URL (비우면 버튼 숨김)" name="common_youtubeUrl" def={c.common.youtubeUrl} />
       </Group>
 
       <Group title="SEO (검색/공유 메타)">

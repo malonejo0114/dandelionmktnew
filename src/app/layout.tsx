@@ -3,7 +3,7 @@ import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { getSiteContent } from "@/lib/site-content";
-import { FloatingKakao } from "@/components/floating-kakao";
+import { FloatingSocial } from "@/components/floating-social";
 import { Analytics } from "@vercel/analytics/react";
 import { RefTracker } from "@/components/ref-tracker";
 
@@ -68,7 +68,7 @@ export default async function RootLayout({
       <body>
         <SmoothScroll />
         {children}
-        <FloatingKakao url={content.common.kakaoUrl} />
+        <FloatingSocial kakaoUrl={content.common.kakaoUrl} youtubeUrl={content.common.youtubeUrl} />
         <RefTracker />
         <Analytics />
         <div className="noise-overlay" aria-hidden="true" />
