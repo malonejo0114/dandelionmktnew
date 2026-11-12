@@ -40,8 +40,8 @@ export const portfolioCases = [
     strategy: "SEO 콘텐츠, 랜딩페이지 카피, 상담 CTA를 하나의 검색 의도에 맞춰 재설계했습니다.",
     result: "상담 전환 증가",
     duration: "4개월",
-    video: "/hero.mp4",
-    poster: "/hero-poster.jpg",
+    video: "/media/cases/CaseSearch.mp4",
+    poster: "/media/cases/CaseSearch.jpg",
     summary: "검색 유입과 상담 흐름을 하나의 구조로 정렬해 상담 전환을 끌어올린 피부과 케이스입니다.",
     detail: [
       { heading: "배경", body: "내원 문의를 만드는 검색 유입은 있었지만, 검색 의도와 랜딩 메시지, 상담 CTA가 서로 다른 언어로 흩어져 있어 방문이 상담으로 이어지지 않았습니다." },
@@ -57,8 +57,8 @@ export const portfolioCases = [
     strategy: "소재 후킹, 랜딩 구조, 문의폼 필드를 상담 의사결정 순서에 맞춰 정리했습니다.",
     result: "문의 완료율 개선",
     duration: "8주",
-    video: "/hero.mp4",
-    poster: "/hero-poster.jpg",
+    video: "/media/cases/CaseFunnel.mp4",
+    poster: "/media/cases/CaseFunnel.jpg",
     summary: "광고 이후의 병목을 소재·랜딩·문의폼까지 한 흐름으로 정리해 문의 완료율을 높인 교육 서비스 케이스입니다.",
     detail: [
       { heading: "배경", body: "광고 클릭은 발생했지만 문의DB가 충분히 쌓이지 않았고, 들어온 상담의 품질 편차도 컸습니다." },
@@ -74,8 +74,8 @@ export const portfolioCases = [
     strategy: "검색 키워드, 리뷰 메시지, 광고 소재, 리타겟팅 흐름을 같은 브랜드 언어로 연결했습니다.",
     result: "브랜드 검색 신호 강화",
     duration: "12주",
-    video: "/hero.mp4",
-    poster: "/hero-poster.jpg",
+    video: "/media/cases/CaseSpread.mp4",
+    poster: "/media/cases/CaseSpread.jpg",
     summary: "흩어져 있던 콘텐츠·광고·후기를 하나의 브랜드 언어로 연결해 브랜드 검색 신호를 키운 로컬 브랜드 케이스입니다.",
     detail: [
       { heading: "배경", body: "콘텐츠, 광고, 고객 후기가 각각 따로 운영되어 브랜드 기억이 누적되지 않았습니다." },

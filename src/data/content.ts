@@ -27,6 +27,8 @@ export type SiteContent = {
   framework: {
     label: string;
     title: string;
+    /** 03 섹션 큰 문장 (흩어졌다 모이는 글자). 줄바꿈은 \n. 2026-11-12 추가, 없으면 기본값 */
+    headline?: string;
     items: FrameworkItem[];
   };
   portfolio: {
@@ -91,6 +93,7 @@ export const defaultContent: SiteContent = {
   framework: {
     label: "— 02 / Framework",
     title: "Growth System",
+    headline: "홀씨 하나가 들판이 되기까지,\n네 개의 구조를 설계합니다.",
     items: [
       { code: "SEARCH", title: "검색되는 구조", body: "고객이 문제를 검색하는 순간 브랜드가 발견되도록 SEO, 콘텐츠, 랜딩의 언어를 정렬합니다." },
       { code: "SPREAD", title: "퍼지는 구조", body: "광고 소재와 메시지 실험을 통해 기억에 남는 후킹 포인트를 반복적으로 찾아냅니다." },

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond } from "next/font/google";
+import { Cormorant_Garamond, Cormorant_SC, Noto_Serif_KR, Pinyon_Script } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { getSiteContent } from "@/lib/site-content";
@@ -12,6 +12,27 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+// 종이 리뉴얼(2026-11-12) 글꼴: 한글 명조 · 영문 대문자 · 필기체
+const notoSerifKr = Noto_Serif_KR({
+  subsets: ["latin"],
+  variable: "--font-serif-kr",
+  weight: ["300", "400", "500", "600"],
+  display: "swap",
+  preload: false,
+});
+const cormorantSc = Cormorant_SC({
+  subsets: ["latin"],
+  variable: "--font-caps",
+  weight: ["500", "600"],
+  display: "swap",
+});
+const pinyon = Pinyon_Script({
+  subsets: ["latin"],
+  variable: "--font-script",
+  weight: "400",
   display: "swap",
 });
 
@@ -64,7 +85,7 @@ export default async function RootLayout({
 }>) {
   const content = await getSiteContent();
   return (
-    <html lang="ko" className={`${cormorant.variable} dark`}>
+    <html lang="ko" className={`${cormorant.variable} ${notoSerifKr.variable} ${cormorantSc.variable} ${pinyon.variable} dark`}>
       <body>
         <SmoothScroll />
         {children}
