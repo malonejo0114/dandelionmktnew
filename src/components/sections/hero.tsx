@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { DandelionMark } from "@/components/dandelion-mark";
-import { HeroBackground } from "@/components/sections/hero-background";
+import { HeroVideo } from "@/components/sections/hero-video";
 import type { SiteContent } from "@/data/content";
 
 export function Hero({ hero }: { hero: SiteContent["hero"] }) {
@@ -17,8 +17,13 @@ export function Hero({ hero }: { hero: SiteContent["hero"] }) {
   }, []);
 
   return (
-    <section className="relative flex min-h-[100dvh] items-center overflow-hidden px-5 pb-16 pt-28 sm:px-8">
-      <HeroBackground />
+    <>
+    {/* 첫 화면 영상: 위에 아무것도 겹치지 않는다. 헤더(72px) 아래에서 시작. */}
+    <section aria-label="민들레효과 소개 영상" className="pt-[72px]">
+      <HeroVideo />
+    </section>
+
+    <section className="relative overflow-hidden px-5 pb-20 pt-16 sm:px-8 sm:pb-24 sm:pt-20">
 
       <div className="relative z-10 mx-auto w-full max-w-[1500px]">
         <div>
@@ -69,5 +74,6 @@ export function Hero({ hero }: { hero: SiteContent["hero"] }) {
 
       <div className="absolute inset-x-5 bottom-8 z-10 h-px bg-[linear-gradient(90deg,#d6b77a,transparent)] sm:inset-x-8" />
     </section>
+    </>
   );
 }

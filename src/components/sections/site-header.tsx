@@ -39,7 +39,8 @@ export function SiteHeader({ common }: { common: SiteContent["common"] }) {
     <header className="fixed inset-x-0 top-0 z-50">
       <div
         className={`flex items-center justify-between border-b border-[#343437] px-5 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] sm:px-8 ${
-          scrolled ? "h-14 bg-[#111214]/90 backdrop-blur-md" : "h-[72px] bg-transparent"
+          // 첫 화면 영상 위에 겹치지 않도록 항상 바탕색이 있는 띠로 둔다 (영상은 72px 아래에서 시작, 2026-11-12)
+          scrolled ? "h-14 bg-[#111214]/90 backdrop-blur-md" : "h-[72px] bg-[#111214]"
         }`}
       >
         <Link href="/" className="flex items-center gap-3" aria-label="Dandelion Effect home">

@@ -336,3 +336,26 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* 첫 화면 영상 — 규칙은 src/components/sections/hero-video.tsx 주석 참고.
+   헤더(72px) 아래에서 시작하고, PC 16:9 · 휴대폰 9:16 비율로 화면 높이를 넘지 않는다.
+   영상이 뜨기 전에는 종이색 + 첫 장면 이미지가 보인다. */
+.hero-video {
+  position: relative;
+  width: 100%;
+  height: min(calc(100svh - 72px), 56.25vw);
+  overflow: hidden;
+  background: #d9d6cf url("/media/hero-poster-desktop.jpg") center / cover no-repeat;
+}
+.hero-video__media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (max-width: 767px) {
+  .hero-video {
+    height: min(calc(100svh - 72px), 177.78vw);
+    background-image: url("/media/hero-poster-mobile.jpg");
+  }
+}
